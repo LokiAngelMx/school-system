@@ -1,10 +1,9 @@
-// models/Materia.js
 const mongoose = require("mongoose");
 
 const MateriaSchema = new mongoose.Schema({
-  nombre: String,
-  clave: String,
-  profesor: String,
+  nombre: { type: String, required: true },
+  clave: { type: String, required: true, unique: true },
+  profesor: { type: String, required: true }
 });
 
 module.exports = mongoose.model("Materia", MateriaSchema);
