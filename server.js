@@ -27,10 +27,12 @@ mongoose
 const authRoutes = require("./routes/auth.routes");
 const alumnosRoutes = require("./routes/alumnos.routes");
 const materiasRoutes = require("./routes/materias.routes");
+const inscripcionesRoutes = require("./routes/inscripciones.routes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/alumnos", alumnosRoutes);
 app.use("/api/materias", materiasRoutes);
+app.use("/api/inscripciones", inscripcionesRoutes);
 
 // Levantar servidor
 app.listen(PORT, () => {
