@@ -1,15 +1,24 @@
 const Calificacion = require("../models/Calificacion");
+const Inscripcion = require("../models/Inscripcion");
 
 // Crear o actualizar calificación
 const asignarCalificacion = async (req, res) => {
   const { alumno, materia, calificacion } = req.body;
   try {
-    // Actualizar si ya existe
+    const inscrito = await Inscripcion.findOne({ alumno, materia });
+
+    if (!inscrito) {
+      return res.status(400).json({
+        message: "El alumno no está inscrito en esta materia"
+      });
+    }
+
     const existing = await Calificacion.findOneAndUpdate(
       { alumno, materia },
       { calificacion },
-      { new: true, upsert: true } // crear si no existe
+      { new: true, upsert: true }
     );
+
     res.status(201).json(existing);
   } catch (err) {
     res.status(500).json({ message: "Error al asignar calificación", error: err.message });
