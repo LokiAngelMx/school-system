@@ -28,11 +28,13 @@ const authRoutes = require("./routes/auth.routes");
 const alumnosRoutes = require("./routes/alumnos.routes");
 const materiasRoutes = require("./routes/materias.routes");
 const inscripcionesRoutes = require("./routes/inscripciones.routes");
+const calificacionesRoutes = require("./routes/calificaciones.routes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/alumnos", alumnosRoutes);
 app.use("/api/materias", materiasRoutes);
 app.use("/api/inscripciones", inscripcionesRoutes);
+app.use("/api/calificaciones", calificacionesRoutes);
 
 // Levantar servidor
 app.listen(PORT, () => {

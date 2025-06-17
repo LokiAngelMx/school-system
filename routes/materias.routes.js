@@ -9,7 +9,7 @@ const {
 } = require("../controllers/materias.controller");
 const { verifyToken } = require("../middlewares/auth.middleware");
 
-router.use(verifyToken); // Todas las rutas requieren JWT
+router.use(verifyToken);
 
 router.post("/", createMateria);
 router.get("/", getMaterias);

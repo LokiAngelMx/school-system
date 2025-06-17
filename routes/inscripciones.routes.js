@@ -8,7 +8,7 @@ const {
 
 const { verifyToken } = require("../middlewares/auth.middleware");
 
-router.use(verifyToken); // Requiere login
+router.use(verifyToken);
 
 router.post("/", inscribirAlumno);
 router.get("/", getInscripciones);

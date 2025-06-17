@@ -9,7 +9,7 @@ const {
 } = require("../controllers/alumnos.controller");
 const { verifyToken } = require("../middlewares/auth.middleware");
 
-router.use(verifyToken); // Protege todas las rutas
+router.use(verifyToken);
 
 router.post("/", createAlumno);
 router.get("/", getAlumnos);
