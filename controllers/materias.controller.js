@@ -1,5 +1,8 @@
 const Materia = require("../models/Materia");
+const Inscripcion = require("../models/Inscripcion");
+const Calificacion = require("../models/Calificacion");
 
+// Crear materia
 const createMateria = async (req, res) => {
   try {
     const materia = new Materia(req.body);
@@ -10,6 +13,7 @@ const createMateria = async (req, res) => {
   }
 };
 
+// Listar todas las materias
 const getMaterias = async (req, res) => {
   try {
     const materias = await Materia.find();
@@ -19,6 +23,7 @@ const getMaterias = async (req, res) => {
   }
 };
 
+// Obtener materia por ID
 const getMateriaById = async (req, res) => {
   try {
     const materia = await Materia.findById(req.params.id);
@@ -29,6 +34,7 @@ const getMateriaById = async (req, res) => {
   }
 };
 
+// Actualizar materia
 const updateMateria = async (req, res) => {
   try {
     const materia = await Materia.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -39,13 +45,21 @@ const updateMateria = async (req, res) => {
   }
 };
 
+// Eliminar materia y sus inscripciones y calificaciones
 const deleteMateria = async (req, res) => {
   try {
     const materia = await Materia.findByIdAndDelete(req.params.id);
-    if (!materia) return res.status(404).json({ message: "Materia no encontrada" });
-    res.json({ message: "Materia eliminada" });
+
+    if (!materia) {
+      return res.status(404).json({ message: "Materia no encontrada" });
+    }
+
+    await Inscripcion.deleteMany({ materia: req.params.id });
+    await Calificacion.deleteMany({ materia: req.params.id });
+
+    res.json({ message: "Materia, inscripciones y calificaciones eliminadas" });
   } catch (err) {
-    res.status(500).json({ message: "Error al eliminar", error: err.message });
+    res.status(500).json({ message: "Error al eliminar materia", error: err.message });
   }
 };
 

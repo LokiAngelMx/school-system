@@ -37,6 +37,23 @@ const getCalificaciones = async (req, res) => {
   }
 };
 
+// Actualizar calificación
+const actualizarCalificacion = async (req, res) => {
+  try {
+    const updated = await Calificacion.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    if (!updated) {
+      return res.status(404).json({ message: "Calificación no encontrada" });
+    }
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ message: "Error al actualizar calificación" });
+  }
+};
+
 // Eliminar
 const eliminarCalificacion = async (req, res) => {
   try {
@@ -51,5 +68,6 @@ const eliminarCalificacion = async (req, res) => {
 module.exports = {
   asignarCalificacion,
   getCalificaciones,
+  actualizarCalificacion,
   eliminarCalificacion
 };

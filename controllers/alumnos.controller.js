@@ -1,4 +1,6 @@
 const Alumno = require("../models/Alumno");
+const Inscripcion = require("../models/Inscripcion");
+const Calificacion = require("../models/Calificacion");
 
 // Crear alumno
 const createAlumno = async (req, res) => {
@@ -47,10 +49,20 @@ const updateAlumno = async (req, res) => {
 const deleteAlumno = async (req, res) => {
   try {
     const alumno = await Alumno.findByIdAndDelete(req.params.id);
-    if (!alumno) return res.status(404).json({ message: "Alumno no encontrado" });
-    res.json({ message: "Alumno eliminado" });
+
+    if (!alumno) {
+      return res.status(404).json({ message: "Alumno no encontrado" });
+    }
+
+    // 🔁 Eliminar inscripciones relacionadas
+    await Inscripcion.deleteMany({ alumno: req.params.id });
+
+    // 🔁 Eliminar calificaciones relacionadas
+    await Calificacion.deleteMany({ alumno: req.params.id });
+
+    res.json({ message: "Alumno, inscripciones y calificaciones eliminadas" });
   } catch (err) {
-    res.status(500).json({ message: "Error al eliminar", error: err.message });
+    res.status(500).json({ message: "Error al eliminar alumno", error: err.message });
   }
 };
 

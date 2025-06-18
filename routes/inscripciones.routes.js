@@ -3,6 +3,7 @@ const router = express.Router();
 const {
   inscribirAlumno,
   getInscripciones,
+  actualizarInscripcion,
   eliminarInscripcion
 } = require("../controllers/inscripciones.controller");
 
@@ -12,6 +13,7 @@ router.use(verifyToken);
 
 router.post("/", inscribirAlumno);
 router.get("/", getInscripciones);
+router.put("/:id", actualizarInscripcion);
 router.delete("/:id", eliminarInscripcion);
 
 module.exports = router;
