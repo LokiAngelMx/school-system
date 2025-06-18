@@ -39,18 +39,45 @@ const getCalificaciones = async (req, res) => {
 
 // Actualizar calificación
 const actualizarCalificacion = async (req, res) => {
+  const { alumno, materia, calificacion } = req.body;
+  const id = req.params.id;
+
   try {
+    // 1. Validar que exista la inscripción alumno-materia
+    const inscrito = await Inscripcion.findOne({ alumno, materia });
+    if (!inscrito) {
+      return res.status(400).json({
+        message: "El alumno no está inscrito en esta materia"
+      });
+    }
+
+    // 2. Verificar si ya existe otra calificación para este alumno-materia distinta de la actual
+    const duplicado = await Calificacion.findOne({
+      alumno,
+      materia,
+      _id: { $ne: id }
+    });
+
+    if (duplicado) {
+      return res.status(400).json({
+        message: "Ya existe una calificación para este alumno en esta materia"
+      });
+    }
+
+    // 3. Actualizar la calificación
     const updated = await Calificacion.findByIdAndUpdate(
-      req.params.id,
-      req.body,
+      id,
+      { alumno, materia, calificacion },
       { new: true }
     );
+
     if (!updated) {
       return res.status(404).json({ message: "Calificación no encontrada" });
     }
+
     res.json(updated);
   } catch (err) {
-    res.status(500).json({ message: "Error al actualizar calificación" });
+    res.status(500).json({ message: "Error al actualizar calificación", error: err.message });
   }
 };
 

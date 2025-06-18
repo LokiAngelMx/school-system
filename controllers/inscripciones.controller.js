@@ -36,18 +36,32 @@ const getInscripciones = async (req, res) => {
 
 // Actualizar inscripción
 const actualizarInscripcion = async (req, res) => {
+  const { alumno, materia } = req.body;
+  const id = req.params.id;
+
   try {
-    const updated = await Inscripcion.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
+    // Verificar si ya existe otra inscripción con los mismos datos
+    const duplicado = await Inscripcion.findOne({
+      alumno,
+      materia,
+      _id: { $ne: id } // excluye la que estás editando
+    });
+
+    if (duplicado) {
+      return res.status(400).json({
+        message: "El alumno ya está inscrito en esta materia"
+      });
+    }
+
+    const updated = await Inscripcion.findByIdAndUpdate(id, { alumno, materia }, { new: true });
+
     if (!updated) {
       return res.status(404).json({ message: "Inscripción no encontrada" });
     }
+
     res.json(updated);
   } catch (err) {
-    res.status(500).json({ message: "Error al actualizar inscripción" });
+    res.status(500).json({ message: "Error al actualizar inscripción", error: err.message });
   }
 };
 
