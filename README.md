@@ -70,7 +70,7 @@ src/
 
 ## ✨ Autores
 
-Desarrollado por;
+Desarrollado por:
 - **Ángel García**
 - **Daniel Moreno**
 - **José Muñetón**
